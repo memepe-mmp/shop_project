@@ -1,0 +1,14 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+    <form class="add-form" method="post">
+        {% csrf_token %}
+        <h2 style="text-align: center">{{ title }}</h2>
+        {{ form.as_p }}
+        <button type="submit" class="btn-add-form">Сохранить</button>
+        <a href="{% url 'catalog:index' %}" class="btn-cancel">Отмена</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}{{ product.title }}{% endblock %}
+
+{% block content %}
+    <article class="product-card">
+        <h2>{{ product.title }}</h2>
+        <p class="price">Цена: {{ product.price }} ₽</p>
+        <p><strong>Статус:</strong> {{ product.get_status_display }}</p>
+        <p><strong>Категория:</strong> {{ product.category.name }}</p>
+        <p><strong>Автор:</strong> {% if product.author %}{{ product.author.username }}{% else %}не указан{% endif %}</p>
+        <p><strong>Описание:</strong> {{ product.description|linebreaksbr }}</p>
+        <div class="characteristics-block">
+            <strong>Характеристики:</strong>
+            {% for feat in product.characteristics.all %}
+                <p>{{ feat.name }}</p>
+            {% empty %}
+                <p>Не указаны</p>
+            {% endfor %}
+        </div>
+
+        <p class="date-title">Создано: {{ product.created_at|date:"d.m.Y H:i" }}</p>
+        <p class="date-title">Изменено: {{ product.updated_at|date:"d.m.Y H:i" }}</p>
+
+        <div class="product-edit-block">
+            <a class="btn" href="{% url 'catalog:update' product.pk %}">Изменить</a>
+            <a class="btn" href="{% url 'catalog:delete' product.pk %}">Удалить</a>
+            <a class="btn" href="{% url 'catalog:index' %}">Назад к каталогу</a>
+        </div>
+    </article>
+
+    <section class="similar-block">
+        <h2 class="similar-block__title">Похожие товары</h2>
+        {% if similar_products %}
+            <div class="similar-grid">
+                {% for sim in similar_products %}
+                    <article class="product-card">
+                        <h3><a href="{% url 'catalog:detail' sim.pk %}">{{ sim.title }}</a></h3>
+                        <p class="price">{{ sim.price }} ₽</p>
+                        <p>Категория: {{ sim.category.name }}</p>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Похожих товаров в этой категории пока нет.</p>
+        {% endif %}
+    </section>
+{% endblock %}

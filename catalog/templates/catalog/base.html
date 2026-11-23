@@ -4,16 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Каталог товаров</title>
+    <title>{% block title %}Каталог товаров{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'catalog/style.css' %}">
 </head>
 <body>
     <header>
-        <a href="{% url 'catalog:index' %}">Каталог магазина</a>
-        <a href="{% url static 'catalog:create' %}">+ Добавить товар</a>
+        <a style="color: blue;
+        font-weight: 800;
+        font-size: 25px;
+        text-decoration: none"
+           href="{% url 'catalog:index' %}">OZOM</a>
+        <a class="btn-add" href="{% url 'catalog:create' %}">+ Добавить товар</a>
     </header>
     <main>
-
+        {% block content %}{% endblock %}
     </main>
     <footer>
 

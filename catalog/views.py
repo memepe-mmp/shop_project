@@ -87,9 +87,9 @@ def product_create(request):
         if form.is_valid():
             form.save()
             return redirect("catalog:index")
-        else:
+    else:
             form = ProductForm()
-        return render(request, "catalog/product_form.html", {"form": form, "title": "Новый товар"})
+    return render(request, "catalog/product_form.html", {"form": form, "title": "Новый товар"})
 
 def product_update(request, pk):
     product = get_object_or_404(Product, pk=pk)

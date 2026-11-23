@@ -1,0 +1,12 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Удаление товара{% endblock %}
+
+{% block content %}
+    <form class="delete-form" method="post">
+        {% csrf_token %}
+        <p>Удалить товар "{{ product.title }}"?</p>
+        <button type="submit" class="btn-delete">Да, удалить</button>
+        <a href="{% url 'catalog:index' %}" class="btn-cancel">Отмена</a>
+    </form>
+{% endblock %}
