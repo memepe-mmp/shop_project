@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Каталог товаров</title>
+    <link rel="stylesheet" href="{% static 'catalog/style.css' %}">
+</head>
+<body>
+    <header>
+        <a href="{% url 'catalog:index' %}">Каталог магазина</a>
+        <a href="{% url static 'catalog:create' %}">+ Добавить товар</a>
+    </header>
+    <main>
+
+    </main>
+    <footer>
+
+    </footer>
+
+</body>
+</html>
