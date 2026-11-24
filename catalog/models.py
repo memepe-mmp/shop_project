@@ -1,5 +1,9 @@
+from django.contrib.postgres.indexes import GinIndex, OpClass
 from django.db import models
 from django.conf import settings
+from django.db.models import Q
+from django.db.models.functions import Upper
+
 
 # МОДЕЛЬ КАТЕГОРИИ
 class Category(models.Model):
@@ -47,6 +51,12 @@ class Product(models.Model):
         ordering = ["-created_at", "-id"]
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+        indexes = [
+            models.Index(fields=["-created_at", "-id"], name="prod_created_idx"),
+            models.Index(fields=["category", "-created_at", "-id"], name="prod_cat_created_idx"),
+            models.Index(fields=["-created_at", "-id"], condition=Q(status="in_stock"), name="prod_instock_created_idx",),
+            GinIndex(OpClass(Upper("title"), name="gin_trgm_ops"), name="prod_title_trgm_idx",),
+        ]
 
     def __str__(self):
         return self.title
