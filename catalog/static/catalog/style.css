@@ -164,6 +164,21 @@ main {
 
 /* PRODUCT_DETAIL.HTML */
 
+.similar-block {
+    margin-top: 40px;
+}
+
+.similar-block h2 {
+    text-align: center;
+}
+
+.similar-grid {
+    padding: 20px;
+    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
 
 /* PRODUCT_CONFIRM_DELETE */
 
