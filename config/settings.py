@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-from django.conf.global_settings import DATABASES
+from django.conf.global_settings import DATABASES, INTERNAL_IPS, LOGGING
 from dotenv import load_dotenv
 
 
@@ -120,3 +120,19 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    INTERNAL_IPS = ["127.0.0.1"]
+
+LOGGING = {
+    "version": 1,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "django.db.backends": {
+            "handlers": ["console"],
+            "level": os.environ.get("SQL_LOG_LEVEL", "WARNING"),
+        },
+    },
+}
