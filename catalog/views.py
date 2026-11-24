@@ -14,7 +14,7 @@ def _parse_decimal(value):
         return None
 
 def index(request):
-    products = Product.objects.all()
+    products = Product.objects.select_related("category", "author").prefetch_related("characteristics")
 
     q = request.GET.get("q", "").strip()
     category_id = request.GET.get("category", "").strip()
@@ -42,9 +42,9 @@ def index(request):
     }
     products = products.order_by(*sort_map.get(sort, sort_map["newest"]))
 
-    total = len(products)
+    total = products.count()
     products = products[:300]
-    categories = Category.objects.all()
+    categories = Category.objects.annotate(products_count=Count("products")).order_by("name")
 
     return render(request, "catalog/product_list.html", {
         "products": products,

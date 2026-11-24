@@ -9,7 +9,7 @@
             <option value="">Все категории</option>
             {% for cat in categories %}
                 <option value="{{ cat.pk }}" {% if request.GET.category == cat.pk|stringformat:"s" %}selected{% endif %}>
-                    {{ cat.name }} ({{ cat.products.count }})
+                    {{ cat.name }} ({{ cat.products_count }})
                 </option>
             {% endfor %}
         </select>
