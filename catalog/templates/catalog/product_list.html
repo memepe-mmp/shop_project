@@ -38,10 +38,10 @@
 
     </form>
 
-    <p>Найдено товаров: {{ total }}</p>
+    <p>Найдено товаров: {{ page.paginator.count }}</p>
 
     <section class="products-grid">
-        {% for product in products %}
+        {% for product in page %}
             <article class="product-card">
                 <h2><a href="{% url 'catalog:detail' product.pk %}">{{ product.title }}</a></h2>
                 <p class="price">Цена: {{ product.price }}  ₽</p>
@@ -60,6 +60,21 @@
         {% empty %}
             <p>Товары не найдены.</p>
         {% endfor %}
+
+        {% if page.paginator.num_pages > 1 %}
+        <nav>
+            {% if page.has_previous %}
+                <a href="?{% if request.GET.q %}q={{ request.GET.q|urlencode }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category|urlencode }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status|urlencode }}&{% endif %}{% if request.GET.min_price %}min_price={{ request.GET.min_price|urlencode }}&{% endif %}{% if request.GET.max_price %}max_price={{ request.GET.max_price|urlencode }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort|urlencode }}&{% endif %}page={{ page.previous_page_number }}">← Назад</a>
+            {% endif %}
+
+            Страница {{ page.number }} из {{ page.paginator.num_pages }}
+
+            {% if page.has_next %}
+                <a href="?{% if request.GET.q %}q={{ request.GET.q|urlencode }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category|urlencode }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status|urlencode }}&{% endif %}{% if request.GET.min_price %}min_price={{ request.GET.min_price|urlencode }}&{% endif %}{% if request.GET.max_price %}max_price={{ request.GET.max_price|urlencode }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort|urlencode }}&{% endif %}page={{ page.next_page_number }}">Вперёд →</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+
     </section>
 
 {% endblock %}

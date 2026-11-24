@@ -1,9 +1,11 @@
+from django.contrib.admin.templatetags.admin_list import pagination
 from django.shortcuts import render, redirect
 from .forms import ProductForm
 from .models import Category, Product
 from django.shortcuts import get_object_or_404
 from decimal import Decimal, InvalidOperation
 from django.db.models import Count, Q
+from django.core.paginator import Paginator
 
 def _parse_decimal(value):
     if not value:
@@ -42,13 +44,14 @@ def index(request):
     }
     products = products.order_by(*sort_map.get(sort, sort_map["newest"]))
 
-    total = products.count()
-    products = products[:300]
+    paginator = Paginator(products, 20)
+    page = paginator.get_page(request.GET.get("page"))
     categories = Category.objects.annotate(products_count=Count("products")).order_by("name")
 
     return render(request, "catalog/product_list.html", {
-        "products": products,
-        "total": total,
+        "page": page,
+        "products": page.object_list,
+        "total": paginator.count,
         "categories": categories,
         "statuses": Product.Status.choices,
         "current_sort": sort,
