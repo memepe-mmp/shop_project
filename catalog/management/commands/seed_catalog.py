@@ -6,6 +6,8 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from faker import Faker
 from catalog.models import Category, Characteristic, Product
+from catalog.services import CATEGORIES_KEY
+from django.core.cache import cache
 
 
 class Command(BaseCommand):
@@ -62,3 +64,4 @@ class Command(BaseCommand):
             ])
 
             self.stdout.write(f"Создано {start + size} из {total}")
+        cache.delete(CATEGORIES_KEY)

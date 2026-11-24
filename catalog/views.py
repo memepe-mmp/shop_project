@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404
 from decimal import Decimal, InvalidOperation
 from django.db.models import Count, Q
 from django.core.paginator import Paginator
+from .services import get_categories_with_counts
+
 
 def _parse_decimal(value):
     if not value:
@@ -46,7 +48,7 @@ def index(request):
 
     paginator = Paginator(products, 20)
     page = paginator.get_page(request.GET.get("page"))
-    categories = Category.objects.annotate(products_count=Count("products")).order_by("name")
+    categories = get_categories_with_counts()
 
     return render(request, "catalog/product_list.html", {
         "page": page,

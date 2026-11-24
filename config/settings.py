@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-from django.conf.global_settings import DATABASES, INTERNAL_IPS, LOGGING
+from django.conf.global_settings import DATABASES, INTERNAL_IPS, LOGGING, SESSION_ENGINE
 from dotenv import load_dotenv
 
 
@@ -137,3 +137,23 @@ LOGGING = {
         },
     },
 }
+
+REDIS_URL = os.environ.get("REDIS_URL")
+
+if REDIS_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": REDIS_URL,
+            "TIMEOUT": 300,
+            "KEY_PREFIX": "shop",
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        }
+    }
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"

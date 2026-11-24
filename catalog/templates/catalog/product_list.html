@@ -41,22 +41,26 @@
     <p>Найдено товаров: {{ page.paginator.count }}</p>
 
     <section class="products-grid">
+        {% load cache %}
+
         {% for product in page %}
-            <article class="product-card">
-                <h2><a href="{% url 'catalog:detail' product.pk %}">{{ product.title }}</a></h2>
-                <p class="price">Цена: {{ product.price }}  ₽</p>
-                <p><strong>Статус:</strong> {{ product.get_status_display }}</p>
-                <p>{{ product.description|truncatechars:160 }}</p>
-                <div class="characteristics-block">
-                    <p><strong>Категория:</strong> {{ product.category.name }} </p>
-                    <p><strong>Автор:</strong> {% if product.author %}{{ product.author.username }}{% else %}не указан{% endif %}</p>
-                </div>
-                <div class="product-edit-block">
-                    <a href="{% url 'catalog:detail' product.pk %}">Подробнее</a>
-                    <a href="{% url 'catalog:update' product.pk %}">Изменить</a>
-                    <a href="{% url 'catalog:delete' product.pk %}">Удалить</a>
-                </div>
-            </article>
+            {% cache 3600 product_card product.pk product.updated_at %}
+                <article class="product-card">
+                    <h2><a href="{% url 'catalog:detail' product.pk %}">{{ product.title }}</a></h2>
+                    <p class="price">Цена: {{ product.price }}  ₽</p>
+                    <p><strong>Статус:</strong> {{ product.get_status_display }}</p>
+                    <p>{{ product.description|truncatechars:160 }}</p>
+                    <div class="characteristics-block">
+                        <p><strong>Категория:</strong> {{ product.category.name }} </p>
+                        <p><strong>Автор:</strong> {% if product.author %}{{ product.author.username }}{% else %}не указан{% endif %}</p>
+                    </div>
+                    <div class="product-edit-block">
+                        <a href="{% url 'catalog:detail' product.pk %}">Подробнее</a>
+                        <a href="{% url 'catalog:update' product.pk %}">Изменить</a>
+                        <a href="{% url 'catalog:delete' product.pk %}">Удалить</a>
+                    </div>
+                </article>
+            {% endcache %}
         {% empty %}
             <p>Товары не найдены.</p>
         {% endfor %}
